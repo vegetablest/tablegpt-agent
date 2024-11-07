@@ -173,7 +173,18 @@ def create_data_analyze_workflow(
         for message in temp_messages:
             if attachments := message.additional_kwargs.get("attachments"):
                 # TODO: We only support one attachment for now.
-                message.content = f"文件名称: {attachments[0]['filename']}"
+                filename = attachments[0]["filename"]
+                if isinstance(message.content, str) and message.content:
+                    message.content += f"\nfilename: {filename}"
+                elif isinstance(message.content, list):
+                    message.content.append(
+                        {
+                            "type": "file",
+                            "file": {"filename": "titanic.csv"},
+                        }
+                    )
+                else:
+                    message.content = f"filename: {filename}"
 
         agent_outcome: AgentAction | AgentFinish = await agent.ainvoke(
             {
@@ -226,7 +237,18 @@ def create_data_analyze_workflow(
         for message in temp_messages:
             if attachments := message.additional_kwargs.get("attachments"):
                 # TODO: We only support one attachment for now.
-                message.content = f"文件名称: {attachments[0]['filename']}"
+                filename = attachments[0]["filename"]
+                if isinstance(message.content, str) and message.content:
+                    message.content += f"\nfilename: {filename}"
+                elif isinstance(message.content, list):
+                    message.content.append(
+                        {
+                            "type": "file",
+                            "file": {"filename": "titanic.csv"},
+                        }
+                    )
+                else:
+                    message.content = f"filename: {filename}"
 
         agent_outcome: AgentAction | AgentFinish = await vlm_agent.ainvoke(
             {
